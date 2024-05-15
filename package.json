@@ -1,0 +1,44 @@
+{
+  "name": "kengroup",
+  "version": "1.0.2",
+  "description": "Kengroup Accounting System",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --x64"
+  },
+  "build": {
+    "appId": "com.binariez.Ja3farMortada.kengroup",
+    "productName": "Kengroup Accounting",
+    "target": "NSIS",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "ja3farMortada",
+        "repo": "kengroup"
+      }
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
+    "extraResources": [
+      "./server"
+    ],
+    "npmRebuild": "false"
+  },
+  "author": "Binariez LLC",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.8.3",
+    "bootstrap": "^5.3.3",
+    "electron-context-menu": "^3.6.1",
+    "electron-log": "^4.4.8",
+    "electron-updater": "^6.1.1",
+    "moment": "^2.29.4",
+    "mysql2": "^3.6.0"
+  },
+  "devDependencies": {
+    "electron": "^22.3.18",
+    "electron-builder": "^24.6.3"
+  }
+}
