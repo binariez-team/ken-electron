@@ -13,5 +13,6 @@ contextBridge.exposeInMainWorld(
         receive: (channel, fn) => {
             ipcRenderer.on(channel, fn)
         },
+        print: (callback) => ipcRenderer.on('printDocument', callback)
     }
 )

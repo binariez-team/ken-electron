@@ -84,7 +84,7 @@ app.on('window-all-closed', () => {
 
 let printWindow;
 ipcMain.handle('print-invoice', async (event, data) => {
-    console.log(data);
+    // console.log(data);
     printWindow = new BrowserWindow({
         width: 1200,
         height: 1000,
@@ -93,7 +93,7 @@ ipcMain.handle('print-invoice', async (event, data) => {
         }
     })
 
-    printWindow.loadFile('print.html');
+    printWindow.loadFile('assets/print.html');
     printWindow.show();
 
     // const printOptions = {
@@ -104,7 +104,7 @@ ipcMain.handle('print-invoice', async (event, data) => {
     printWindow.webContents.on('did-finish-load', async function () {
         await printWindow.webContents.send('printDocument', data);
         printWindow.webContents.print([], (success) => {
-            printWindow.close();
+            // printWindow.close();
         });
     })
 })
