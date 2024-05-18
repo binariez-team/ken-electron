@@ -1,91 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Print</title>
-    <link
-      rel="stylesheet"
-      href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" href="printStyle.css" />
-    <script src="../node_modules/angular/angular.min.js"></script>
-  </head>
-  <body ng-app="printApp" ng-controller="printController">
-    <div class="header primary">
-      <div class="row d-flex justify-content-between">
-        <div class="col-8">
-          <img src="ken-logo.png" height="60px" />
-          <p>VAT #: 3876117-601</p>
-        </div>
-        <div class="col-4 text-end">
-          <p>
-            +961 81-07 00 55
-            <br />
-            https://kencosmetics.com
-            <br />
-            info&#64;kencosmetics.com
-          </p>
-        </div>
-      </div>
-
-      <hr class="mt-0 pt-0 primary-hr" />
-
-      <div class="row d-flex justify-content-between">
-        <div class="col-4">
-          <p><strong>Billed To</strong><br />{{ invoice.customer_name }}</p>
-        </div>
-
-        <div class="col-4">
-          <!-- <h2 class="text-center">Price Quote</h2> -->
-        </div>
-
-        <div class="col-4">
-          <div class="row">
-            <div class="col-6 text-right">
-              <p>
-                <strong>Invoice #</strong>
-                <br />
-                <strong>Date</strong>
-              </p>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Print</title>
+        <link
+            rel="stylesheet"
+            href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
+        />
+        <link rel="stylesheet" href="printStyle.css" />
+        <script src="../node_modules/angular/angular.min.js"></script>
+    </head>
+    <body ng-app="printApp" ng-controller="printController">
+        <div class="header primary">
+            <div class="row d-flex justify-content-between">
+                <div class="col-8">
+                    <img src="kengroup.png" height="60px" />
+                    <p>VAT #: 3876117-601</p>
+                </div>
+                <div class="col-4 text-end">
+                    <p>
+                        +961 81-07 00 55
+                        <br />
+                        https://kencosmetics.com
+                        <br />
+                        info&#64;kengrouplb.com
+                    </p>
+                </div>
             </div>
-            <div class="col-6 text-right">
-              <p>
-                {{ invoice.invoice_number }}
+
+            <hr class="mt-0 pt-0 primary-hr" />
+
+            <div class="row d-flex justify-content-between">
+                <div class="col-6">
+                    <p>
+                        <strong>Billed To:</strong> {{ invoice.customer_name }}
+                        <br />
+                        <strong>Financial #:</strong> {{
+                        invoice.financial_number }}
+                        <br />
+                        <strong>Phone:</strong> {{ invoice.customer_phone }}
+                        <br />
+                        <strong>Address:</strong> {{ invoice.customer_address }}
+                    </p>
+                </div>
+
+                <div class="col-2">
+                    <!-- <h2 class="text-center">Price Quote</h2> -->
+                </div>
+
+                <div class="col-4 text-end">
+                    <p>
+                        <strong>Invoice #:</strong> {{ invoice.invoice_number }}
+                        <br />
+                        <strong>Date:</strong> {{ invoice.order_datetime }}
+                    </p>
+                </div>
+
                 <br />
-                {{ moment().format("MM-DD-YYYY") }}
-              </p>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <br />
-    </div>
+            <table class="table table-bordered table-sm text-center">
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Item Description</th>
+                        <th>Unit Price</th>
+                        <th>Qty</th>
+                        <th>Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="record in invoice.invoice_map">
+                        <td>{{ record.sku }}</td>
+                        <td>{{ record.product_name }}</td>
+                        <td>{{ record.unit_price | currency }}</td>
 
+                        <td>{{ record.quantity }}</td>
 
-		<table class="table table-bordered table-sm text-center">
-			<thead>
-			<tr>
-				<th>SKU</th>
-				<th>Item Description</th>
-				<th>Unit Price</th>
-				<th>Qty</th>
-				<th>Total Price</th>
-			</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="record in invoice.invoice_map">
-					<td>{{ record.sku }}</td>
-					<td>{{ record.product_name }}</td>
-					<td>${{ record.unit_price }}</td>
-
-					<td>{{ record.quantity }}</td>
-
-					<td>${{ record.unit_price * record.quantity }}</td>
-				</tr>
-				<!-- <tr>
+                        <td>{{ record.total_price | currency }}</td>
+                    </tr>
+                    <!-- <tr>
 					<td colspan="2"></td>
 					<td colspan="3">
 						<strong>Subtotal: </strong> {{ invoice.sub_total | currency }}
@@ -100,67 +96,75 @@
 					<strong>Grand total: {{ invoice.total_amount | currency }}</strong>
 					</td>
 				</tr> -->
-			</tbody>
-		</table>
-	
-		  <div class="row d-flex justify-content-end text-end">
-			<div class="col-3 text-end" *ngIf="last">
-			  <strong>Subtotal: </strong> {{ invoice.sub_total | currency }}
-			  <br />
-			  <strong>Discount: </strong> %{{ invoice.discount_percent || 0 }}
-			  <hr class="m-0" />
-			  <strong>Net amount: </strong>
-			  {{ invoice.sub_total - invoice.discount_value | currency }}
-			  <br />
-			  <strong>VAT (11%): </strong> {{ invoice.vat_value | currency }}
-			  <br />
-			  <strong>Grand total: {{ invoice.total_amount | currency }}</strong>
-			</div>
-		  </div>
-		</div>
+                </tbody>
+            </table>
 
+            <div class="row d-flex justify-content-end text-end">
+                <div class="col-6 text-end">
+                    <strong>Subtotal: </strong> {{ invoice.sub_total | currency
+                    }}
+                    <br />
+                    <strong>Discount: </strong> %{{ invoice.discount_percent ||
+                    0 }}
+                    <hr class="m-0" />
+                    <strong>Net amount: </strong>
+                    {{ invoice.sub_total - invoice.discount_value | currency }}
+                    <br />
+                    <span class="float-start"
+                        ><strong>VAT LBP: </strong>113,032,235 LBP</span
+                    >
+                    <strong>VAT $ (11%): </strong> {{ invoice.vat_value |
+                    currency }}
+                    <br />
+                    <strong
+                        >Grand total: {{ invoice.total_amount | currency
+                        }}</strong
+                    >
+                </div>
+            </div>
+        </div>
 
-    <footer class="divFooter fixed">
-      <img src="icon-250.png" style="opacity: 0.1" />
-    </footer>
-  </body>
+        <footer class="divFooter fixed">
+            <img src="icon-250.png" style="opacity: 0.1" />
+        </footer>
+    </body>
 
-  <script>
-    const app = angular.module("printApp", []);
-    app.controller("printController", function ($scope) {
-      window.electron.print((event, data) => {
-        console.log(data);
-        $scope.$digest(($scope.invoice = data));
-        // $scope.$digest(($scope.invoice = data.invoice));
-      });
+    <script>
+        const app = angular.module("printApp", []);
+        app.controller("printController", function ($scope) {
+            window.electron.print((event, data) => {
+                console.log(data);
+                $scope.$digest(($scope.invoice = data));
+                // $scope.$digest(($scope.invoice = data.invoice));
+            });
 
-        $scope.splitArrayIntoChunks = function (array, chunkSize) {
-          $scope.chunks = [];
-          for (let i = 0; i < array.length; i += chunkSize) {
-            $scope.chunks.push(array.slice(i, i + chunkSize));
-          }
+            $scope.splitArrayIntoChunks = function (array, chunkSize) {
+                $scope.chunks = [];
+                for (let i = 0; i < array.length; i += chunkSize) {
+                    $scope.chunks.push(array.slice(i, i + chunkSize));
+                }
 
-          return $scope.chunks;
-        };
+                return $scope.chunks;
+            };
 
-    //   function getDate() {
-    //     var d = new Date();
-    //     months = [
-    //       "1",
-    //       "2",
-    //       "3",
-    //       "4",
-    //       "5",
-    //       "6",
-    //       "7",
-    //       "8",
-    //       "9",
-    //       "10",
-    //       "11",
-    //       "12",
-    //     ];
-    //     return d.getDate() + "-" + months[d.getMonth()] + "-" + d.getFullYear();
-    //   }
-    });
-  </script>
+            //   function getDate() {
+            //     var d = new Date();
+            //     months = [
+            //       "1",
+            //       "2",
+            //       "3",
+            //       "4",
+            //       "5",
+            //       "6",
+            //       "7",
+            //       "8",
+            //       "9",
+            //       "10",
+            //       "11",
+            //       "12",
+            //     ];
+            //     return d.getDate() + "-" + months[d.getMonth()] + "-" + d.getFullYear();
+            //   }
+        });
+    </script>
 </html>

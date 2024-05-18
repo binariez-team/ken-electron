@@ -86,25 +86,26 @@ let printWindow;
 ipcMain.handle('print-invoice', async (event, data) => {
     // console.log(data);
     printWindow = new BrowserWindow({
-        width: 1200,
+        width: 706.95553,
         height: 1000,
+        show: false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }
     })
 
     printWindow.loadFile('assets/print.html');
-    printWindow.show();
+    // printWindow.show();
 
-    // const printOptions = {
-    //     silent: true, // Print without showing a dialog (optional)
-    //     marginsType: 0, // Set margin type (optional)
-    //     // Other options as per documentation
-    //   };
+    const printOptions = {
+        silent: false, // Print without showing a dialog (optional)
+        marginsType: 0, // Set margin type (optional)
+        // Other options as per documentation
+      };
     printWindow.webContents.on('did-finish-load', async function () {
         await printWindow.webContents.send('printDocument', data);
-        printWindow.webContents.print([], (success) => {
-            printWindow.close();
+        printWindow.webContents.print(printOptions, (success) => {
+            // printWindow.close();
         });
     })
 })
