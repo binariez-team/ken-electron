@@ -110,8 +110,29 @@
                     <strong>Net amount: </strong>
                     {{ invoice.sub_total - invoice.discount_value | currency }}
                     <br />
+
+                    <strong ng-if="invoice.discount2_percent"
+                        >Extra discount:
+                    </strong>
+                    <span ng-if="invoice.discount2_percent"
+                        >%{{ invoice.discount2_percent }}</span
+                    >
+
+                    <br ng-if="invoice.discount2_percent" />
+
+                    <strong ng-if="invoice.discount2_percent"
+                        >Net amount:
+                    </strong>
+                    <span ng-if="invoice.discount2_percent"
+                        >{{ invoice.sub_total - invoice.discount_value -
+                        invoice.discount2_value | currency }}</span
+                    >
+
+                    <br ng-if="invoice.discount2_percent" />
+
                     <span class="float-start"
-                        ><strong>VAT LBP: </strong>113,032,235 LBP</span
+                        ><strong>VAT LBP: </strong>{{ invoice.vat_value_lbp |
+                        currency:'L.L ':0 }}</span
                     >
                     <strong>VAT $ (11%): </strong> {{ invoice.vat_value |
                     currency }}

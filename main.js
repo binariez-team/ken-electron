@@ -95,7 +95,7 @@ ipcMain.handle('print-invoice', async (event, data) => {
     })
 
     printWindow.loadFile('assets/print.html');
-    // printWindow.show();
+    printWindow.show();
 
     const printOptions = {
         silent: false, // Print without showing a dialog (optional)
@@ -105,7 +105,7 @@ ipcMain.handle('print-invoice', async (event, data) => {
     printWindow.webContents.on('did-finish-load', async function () {
         await printWindow.webContents.send('printDocument', data);
         printWindow.webContents.print(printOptions, (success) => {
-            // printWindow.close();
+            printWindow.close();
         });
     })
 })
