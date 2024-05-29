@@ -69,7 +69,9 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="record in data">
-                        <td>{{ record.date || "Before " + startDate }}</td>
+                        <td>
+                            {{ record.journal_date || "Before " + startDate }}
+                        </td>
                         <td>{{ record.journal_description }}</td>
                         <td>{{ record.debit | currency }}</td>
                         <td>{{ record.credit | currency }}</td>
