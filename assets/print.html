@@ -51,6 +51,8 @@
                 </div>
 
                 <div class="col-4 text-end">
+                    <h3 ng-if="invoice.type == 'sale'">Sales Invoice</h3>
+                    <h3 ng-if="invoice.type == 'return'">Return Invoice</h3>
                     <p>
                         <strong>Invoice #:</strong> {{ invoice.invoice_number }}
                         <br />
