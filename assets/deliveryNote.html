@@ -51,6 +51,7 @@
                 </div>
 
                 <div class="col-4 text-end">
+                    <h3>Delivery Note</h3>
                     <p>
                         <strong>Invoice #:</strong> {{ invoice.invoice_number }}
                         <br />
@@ -67,84 +68,24 @@
                         <th>#</th>
                         <th>SKU</th>
                         <th>Item Description</th>
-                        <th>Unit Price</th>
                         <th>Qty</th>
-                        <th>Total Price</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="record in invoice.invoice_map">
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ record.sku }}</td>
-                        <td>{{ record.product_name }}</td>
-                        <td>{{ record.unit_price | currency }}</td>
-
-                        <td>{{ record.quantity }}</td>
-
-                        <td>{{ record.total_price | currency }}</td>
+                        <td width="5%">{{ $index + 1 }}</td>
+                        <td width="10%">{{ record.sku }}</td>
+                        <td width="75%">{{ record.product_name }}</td>
+                        <td width="10%">{{ record.quantity }}</td>
                     </tr>
-                    <!-- <tr>
-					<td colspan="2"></td>
-					<td colspan="3">
-						<strong>Subtotal: </strong> {{ invoice.sub_total | currency }}
-					<br />
-					<strong>Discount: </strong> %{{ invoice.discount_percent || 0 }}
-					<hr />
-					<strong>Net amount: </strong>
-					{{ invoice.sub_total - invoice.discount_value | currency }}
-					<br />
-					<strong>VAT (11%): </strong> {{ invoice.vat_value | currency }}
-					<br />
-					<strong>Grand total: {{ invoice.total_amount | currency }}</strong>
-					</td>
-				</tr> -->
                 </tbody>
+                <!-- <tfoot>
+                    <tr>
+                        <td colspan="3"></td>
+                        <th>{{ invoice.totalQty }}</th>
+                    </tr>
+                </tfoot> -->
             </table>
-
-            <div class="row d-flex justify-content-end text-end">
-                <div class="col-6 text-end">
-                    <strong>Subtotal: </strong> {{ invoice.sub_total | currency
-                    }}
-                    <br />
-                    <strong>Discount: </strong> %{{ invoice.discount_percent ||
-                    0 }}
-                    <hr class="m-0" />
-                    <strong>Net amount: </strong>
-                    {{ invoice.sub_total - invoice.discount_value | currency }}
-                    <br />
-
-                    <strong ng-if="invoice.discount2_percent"
-                        >Extra discount:
-                    </strong>
-                    <span ng-if="invoice.discount2_percent"
-                        >%{{ invoice.discount2_percent }}</span
-                    >
-
-                    <br ng-if="invoice.discount2_percent" />
-
-                    <strong ng-if="invoice.discount2_percent"
-                        >Net amount:
-                    </strong>
-                    <span ng-if="invoice.discount2_percent"
-                        >{{ invoice.sub_total - invoice.discount_value -
-                        invoice.discount2_value | currency }}</span
-                    >
-
-                    <br ng-if="invoice.discount2_percent" />
-
-                    <span class="float-start"
-                        ><strong>VAT LBP: </strong>{{ invoice.vat_value_lbp |
-                        currency:'L.L ':0 }}</span
-                    >
-                    <strong>VAT $ (11%): </strong> {{ invoice.vat_value |
-                    currency }}
-                    <br />
-                    <strong
-                        >Grand total: {{ invoice.total_amount | currency
-                        }}</strong
-                    >
-                </div>
-            </div>
         </div>
 
         <footer class="divFooter fixed">
@@ -169,25 +110,6 @@
 
                 return $scope.chunks;
             };
-
-            //   function getDate() {
-            //     var d = new Date();
-            //     months = [
-            //       "1",
-            //       "2",
-            //       "3",
-            //       "4",
-            //       "5",
-            //       "6",
-            //       "7",
-            //       "8",
-            //       "9",
-            //       "10",
-            //       "11",
-            //       "12",
-            //     ];
-            //     return d.getDate() + "-" + months[d.getMonth()] + "-" + d.getFullYear();
-            //   }
         });
     </script>
 </html>
