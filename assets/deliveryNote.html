@@ -16,8 +16,8 @@
         <div class="header primary">
             <div class="row d-flex justify-content-between wrapper">
                 <div class="col-8">
-                    <img src="kengroup.png" height="60px" />
-                    <p>VAT #: 3876117-601</p>
+                    <img src="kencosmetics.png" height="60px" />
+                    <!-- <p>VAT #: 3876117-601</p> -->
                 </div>
                 <div class="col-4 text-end">
                     <p>
@@ -25,7 +25,7 @@
                         <br />
                         https://kencosmetics.com
                         <br />
-                        info&#64;kengrouplb.com
+                        info&#64;kencosmetics.com
                     </p>
                 </div>
             </div>
@@ -35,11 +35,11 @@
             <div class="row d-flex justify-content-between">
                 <div class="col-6">
                     <p>
-                        <strong>Billed To:</strong> {{ invoice.customer_name }}
+                        <strong>Quote To:</strong> {{ invoice.customer_name }}
                         <br />
-                        <strong>Financial #:</strong> {{
+                        <!-- <strong>Financial #:</strong> {{
                         invoice.financial_number }}
-                        <br />
+                        <br /> -->
                         <strong>Phone:</strong> {{ invoice.customer_phone }}
                         <br />
                         <strong>Address:</strong> {{ invoice.customer_address }}
@@ -53,7 +53,7 @@
                 <div class="col-4 text-end">
                     <h3>Delivery Note</h3>
                     <p>
-                        <strong>Invoice #:</strong> {{ invoice.invoice_number }}
+                        <strong>Quote #:</strong> {{ invoice.invoice_number }}
                         <br />
                         <strong>Date:</strong> {{ invoice.order_datetime }}
                     </p>
