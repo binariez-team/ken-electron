@@ -1,6 +1,6 @@
 {
     "name": "kengroup",
-    "version": "1.5.4",
+    "version": "1.5.5",
     "description": "Kengroup Accounting System",
     "main": "main.js",
     "scripts": {
@@ -9,13 +9,13 @@
     },
     "build": {
         "appId": "com.binariez.Ja3farMortada.kengroup",
-        "productName": "Kengroup Accounting",
+        "productName": "Kengroup",
         "target": "NSIS",
         "publish": [
             {
                 "provider": "github",
                 "owner": "binariez-team",
-                "repo": "kengroup"
+                "repo": "ken-electron"
             }
         ],
         "directories": {
@@ -25,6 +25,10 @@
             "./server"
         ],
         "npmRebuild": "false"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/binariez-team/ken-electron.git"
     },
     "author": "Binariez LLC",
     "license": "ISC",
@@ -39,7 +43,7 @@
         "mysqldump": "^3.2.0"
     },
     "devDependencies": {
-        "electron": "^30.0.6",
+        "electron": "^30.3.1",
         "electron-builder": "^24.6.3"
     }
 }

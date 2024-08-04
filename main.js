@@ -40,6 +40,11 @@ if (!isDev) {
     );
 }
 
+Object.defineProperty(app, "isPackaged", {
+    get() {
+        return true;
+    },
+});
 async function createWindow() {
     const win = new BrowserWindow({
         width: 800,
@@ -63,6 +68,10 @@ async function createWindow() {
     loadSystem();
 
     win.webContents.on("did-fail-load", () => loadSystem());
+
+    // require update module
+    const updater = require("./update");
+    updater(win, ipcMain);
 }
 
 app.whenReady().then(() => {
