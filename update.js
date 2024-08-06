@@ -7,6 +7,8 @@ module.exports = (win, ipcMain) => {
     // auto update module
 
     autoUpdater.autoDownload = false;
+    autoUpdater.disableDifferentialDownload = true;
+    autoUpdater.disable;
     autoUpdater.logger = log;
     autoUpdater.logger.transports.file.level = "info";
 
@@ -67,7 +69,8 @@ module.exports = (win, ipcMain) => {
             ")";
         sendStatusToWindow("downloading", progressObj);
     });
-    autoUpdater.on("download-completed", (info) => {
-        sendStatusToWindow("download-completed", info);
+
+    autoUpdater.on("update-downloaded", (info) => {
+        sendStatusToWindow("update-downloaded", info);
     });
 };
