@@ -19,4 +19,9 @@ contextBridge.exposeInMainWorld("electron", {
     updateNotAvailable: (callback) => ipcRenderer.on("up-to-date", callback),
 
     error: (callback) => ipcRenderer.on("error", callback),
+
+    downloading: (callback) => ipcRenderer.on("download-progress", callback),
+
+    downloadCompleted: (callback) =>
+        ipcRenderer.on("download-completed", callback),
 });

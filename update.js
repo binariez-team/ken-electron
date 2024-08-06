@@ -67,7 +67,7 @@ module.exports = (win, ipcMain) => {
             ")";
         sendStatusToWindow("downloading", progressObj);
     });
-    autoUpdater.on("update-downloaded", (info) => {
-        sendStatusToWindow("downloaded", info);
+    autoUpdater.on("download-completed", (info) => {
+        sendStatusToWindow("download-completed", info);
     });
 };
