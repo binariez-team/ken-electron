@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Print</title>
+        <link
+            rel="stylesheet"
+            href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
+        />
+        <link rel="stylesheet" href="printStyle.css" />
+        <script src="../node_modules/angular/angular.min.js"></script>
+    </head>
+    <body ng-app="printApp" ng-controller="printController">
+        <div class="header primary">
+            <div class="row d-flex justify-content-between">
+                <div class="col-8">
+                    <img src="kencosmetics.png" height="60px" />
+                    <!-- <p>VAT #: 3876117-601</p> -->
+                </div>
+                <div class="col-4 text-end">
+                    <p>
+                        +961 81-07 00 55
+                        <br />
+                        https://kencosmetics.com
+                        <br />
+                        info&#64;kencosmetics.com
+                    </p>
+                </div>
+            </div>
+
+            <hr class="mt-0 pt-0 primary-hr" />
+
+            <div class="row">
+                <div class="col-6">
+                    <h3>Trial Balance</h3>
+                    <p class="mb-0">
+                        <strong>Start Date:</strong> {{ startDate }}
+                    </p>
+                    <p><strong>End Date:</strong> {{ endDate }}</p>
+                </div>
+
+                <br />
+            </div>
+
+            <table class="table table-sm text-center">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Accounts</th>
+                        <th colspan="2">Opening Balance</th>
+                        <th colspan="2">Period</th>
+                        <th colspan="2">End Balance</th>
+                    </tr>
+                    <tr>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="record in data">
+                        <td>
+                            {{ record.account_number }} - {{ record.english_name
+                            }}
+                        </td>
+
+                        <td>
+                            <span ng-if="currency === 'USD'">
+                                {{ record.initial_debit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ record.initial_debit_lbp.toLocaleString() }}
+                                L.L
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-if="currency === 'USD'">
+                                {{ record.initial_credit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ record.initial_credit_lbp }} L.L
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-if="currency === 'USD'">
+                                {{ record.period_debit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ record.period_debit_lbp }} L.L
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-if="currency === 'USD'">
+                                {{ record.period_credit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ record.period_credit_lbp }} L.L
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-if="currency === 'USD'">
+                                {{ record.end_debit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ record.end_debit_lbp }} L.L
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-if="currency === 'USD'">
+                                {{ record.end_credit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ record.end_credit_lbp }} L.L
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr style="border-top: 2px black solid">
+                        <th>Total</th>
+                        <th>
+                            <span ng-if="currency === 'USD'">
+                                {{ totals.initial_debit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ totals.initial_debit_lbp }} L.L
+                            </span>
+                        </th>
+                        <th>
+                            <span ng-if="currency === 'USD'">
+                                {{ totals.initial_credit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ totals.initial_credit_lbp }} L.L
+                            </span>
+                        </th>
+                        <th>
+                            <span ng-if="currency === 'USD'">
+                                {{ totals.period_debit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ totals.period_debit_lbp }} L.L
+                            </span>
+                        </th>
+                        <th>
+                            <span ng-if="currency === 'USD'">
+                                {{ totals.period_credit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ totals.period_credit_lbp }} L.L
+                            </span>
+                        </th>
+                        <th>
+                            <span ng-if="currency === 'USD'">
+                                {{ totals.end_debit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ totals.end_debit_lbp }} L.L
+                            </span>
+                        </th>
+                        <th>
+                            <span ng-if="currency === 'USD'">
+                                {{ totals.end_credit | currency }}
+                            </span>
+                            <span ng-if="currency === 'LBP'">
+                                {{ totals.end_credit_lbp }} L.L
+                            </span>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <footer class="divFooter fixed">
+            <img src="icon-250.png" style="opacity: 0.1" />
+        </footer>
+    </body>
+
+    <script>
+        const app = angular.module("printApp", []);
+        app.controller("printController", function ($scope) {
+            window.electron.print((event, data) => {
+                $scope.$digest(($scope.data = data[0]));
+                $scope.$digest(($scope.currency = data[1]));
+                $scope.$digest(($scope.startDate = data[2]));
+                $scope.$digest(($scope.endDate = data[3]));
+                $scope.$digest(($scope.totals = data[4]));
+            });
+
+            $scope.splitArrayIntoChunks = function (array, chunkSize) {
+                $scope.chunks = [];
+                for (let i = 0; i < array.length; i += chunkSize) {
+                    $scope.chunks.push(array.slice(i, i + chunkSize));
+                }
+
+                return $scope.chunks;
+            };
+        });
+    </script>
+</html>
