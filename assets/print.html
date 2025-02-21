@@ -119,6 +119,16 @@
 
                     <br ng-if="invoice.discount2_percent" />
 
+                    <!-- include VAT -->
+                    <!-- <span class="float-start"
+                        ><strong>VAT LBP: </strong>{{ invoice.vat_value_lbp |
+                        currency:'L.L ':0 }}</span
+                    >
+                    <strong>VAT $ (11%): </strong> {{ invoice.vat_value |
+                    currency }}
+                    <br /> -->
+                    <!-- end VAT -->
+
                     <strong ng-if="invoice.include_delivery"
                         >Delivery Charge:
                     </strong>
