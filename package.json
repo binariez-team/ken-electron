@@ -1,21 +1,24 @@
 {
     "name": "kengroup",
-    "version": "1.9.6",
+    "version": "1.9.7",
     "description": "Kengroup Accounting System",
     "main": "main.js",
     "scripts": {
         "start": "electron .",
-        "build": "electron-builder --x64"
+        "build": "rm -rf dist && electron-builder --x64 --win --publish always"
     },
     "build": {
         "appId": "com.binariez.Ja3farMortada.kengroup",
         "productName": "Kengroup",
+        "artifactName": "${name}-${version}.${ext}",
         "target": "NSIS",
         "publish": [
             {
                 "provider": "github",
                 "owner": "binariez-team",
-                "repo": "ken-electron"
+                "repo": "ken-electron",
+                "token": "${env.GH_TOKEN}",
+				"releaseType": "release"
             }
         ],
         "directories": {
