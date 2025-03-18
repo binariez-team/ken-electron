@@ -17,7 +17,6 @@
 				"provider": "github",
 				"owner": "binariez-team",
 				"repo": "ken-electron",
-				"token": "${env.GH_TOKEN}",
 				"releaseType": "release"
 			}
 		],
