@@ -28,17 +28,17 @@ contextMenu({
 });
 
 // Check if electron is in development mode to enable Node.js on release mode
-var node;
-const isEnvSet = "ELECTRON_IS_DEV" in process.env;
-const getFromEnv = Number.parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
-const isDev = isEnvSet ? getFromEnv : !app.isPackaged;
-if (!isDev) {
-    // require server
-    const server = require("../server");
-    node = server.listen(3500, () =>
-        console.log(`listening on port ${3500} ...`)
-    );
-}
+// var node;
+// const isEnvSet = "ELECTRON_IS_DEV" in process.env;
+// const getFromEnv = Number.parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
+// const isDev = isEnvSet ? getFromEnv : !app.isPackaged;
+// if (!isDev) {
+//     // require server
+//     const server = require("../server");
+//     node = server.listen(3500, () =>
+//         console.log(`listening on port ${3500} ...`)
+//     );
+// }
 
 Object.defineProperty(app, "isPackaged", {
     get() {
@@ -86,9 +86,9 @@ app.whenReady().then(() => {
 
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
-        if (!isDev) {
-            node.close();
-        }
+        // if (!isDev) {
+        //     node.close();
+        // }
         app.quit();
     }
 });
@@ -258,30 +258,31 @@ ipcMain.handle("backup", () => {
             properties: ["dontAddToRecent"],
         })
         .then(function (data) {
-            if (data.canceled == false) {
-                try {
-                    return mysqldump({
-                        connection: {
-                            host: "localhost",
-                            user: "root",
-                            password: "roottoor",
-                            database: "kengroup",
-                        },
-                        dumpToFile: `${data.filePath}`,
-                    }).then(
-                        function () {
-                            return "success";
-                        },
-                        function (error) {
-                            return error;
-                        }
-                    );
-                } catch (error) {
-                    console.log(error);
-                    return error;
-                }
-            } else {
-                return "canceled";
-            }
+            return "canceled";
+            // if (data.canceled == false) {
+            //     try {
+            //         return mysqldump({
+            //             connection: {
+            //                 host: "localhost",
+            //                 user: "root",
+            //                 password: "roottoor",
+            //                 database: "kengroup",
+            //             },
+            //             dumpToFile: `${data.filePath}`,
+            //         }).then(
+            //             function () {
+            //                 return "success";
+            //             },
+            //             function (error) {
+            //                 return error;
+            //             }
+            //         );
+            //     } catch (error) {
+            //         console.log(error);
+            //         return error;
+            //     }
+            // } else {
+            //     return "canceled";
+            // }
         });
 });
