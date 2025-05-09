@@ -244,38 +244,64 @@ ipcMain.handle("print-stock", async (event, data) => {
     });
 });
 
-ipcMain.handle("backup", () => {
-    return dialog
-        .showSaveDialog({
-            defaultPath: "kengroup.sql",
-            properties: ["dontAddToRecent"],
-        })
-        .then(function (data) {
-            return "canceled";
-            // if (data.canceled == false) {
-            //     try {
-            //         return mysqldump({
-            //             connection: {
-            //                 host: "localhost",
-            //                 user: "root",
-            //                 password: "roottoor",
-            //                 database: "kengroup",
-            //             },
-            //             dumpToFile: `${data.filePath}`,
-            //         }).then(
-            //             function () {
-            //                 return "success";
-            //             },
-            //             function (error) {
-            //                 return error;
-            //             }
-            //         );
-            //     } catch (error) {
-            //         console.log(error);
-            //         return error;
-            //     }
-            // } else {
-            //     return "canceled";
-            // }
+ipcMain.handle("print-voucher", async (event, data) => {
+    // console.log(data);
+    printWindow = new BrowserWindow({
+        width: 706.95553,
+        height: 1000,
+        show: false,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js"),
+        },
+    });
+
+    printWindow.loadFile("assets/voucher.html");
+    printWindow.show();
+
+    const printOptions = {
+        silent: false, // Print without showing a dialog (optional)
+        marginsType: 0, // Set margin type (optional)
+    };
+    printWindow.webContents.on("did-finish-load", async function () {
+        await printWindow.webContents.send("printDocument", data);
+        printWindow.webContents.print(printOptions, (success) => {
+            printWindow.close();
         });
+    });
 });
+
+// ipcMain.handle("backup", () => {
+//     return dialog
+//         .showSaveDialog({
+//             defaultPath: "kengroup.sql",
+//             properties: ["dontAddToRecent"],
+//         })
+//         .then(function (data) {
+//             return "canceled";
+//             // if (data.canceled == false) {
+//             //     try {
+//             //         return mysqldump({
+//             //             connection: {
+//             //                 host: "localhost",
+//             //                 user: "root",
+//             //                 password: "roottoor",
+//             //                 database: "kengroup",
+//             //             },
+//             //             dumpToFile: `${data.filePath}`,
+//             //         }).then(
+//             //             function () {
+//             //                 return "success";
+//             //             },
+//             //             function (error) {
+//             //                 return error;
+//             //             }
+//             //         );
+//             //     } catch (error) {
+//             //         console.log(error);
+//             //         return error;
+//             //     }
+//             // } else {
+//             //     return "canceled";
+//             // }
+//         });
+// });

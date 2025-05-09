@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Print</title>
+        <link
+            rel="stylesheet"
+            href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
+        />
+        <link rel="stylesheet" href="printStyle.css" />
+        <script src="../node_modules/angular/angular.min.js"></script>
+    </head>
+    <body ng-app="printApp" ng-controller="printController">
+        <div class="header primary">
+            <div class="row d-flex justify-content-between wrapper">
+                <div class="col-8">
+                    <img src="kencosmetics.png" height="60px" />
+                    <!-- <p>VAT #: 3876117-601</p> -->
+                </div>
+                <div class="col-4 text-end">
+                    <p>
+                        +961 81-07 00 55
+                        <br />
+                        https://kencosmetics.com
+                        <br />
+                        info&#64;kencosmetics.com
+                    </p>
+                </div>
+            </div>
+
+            <hr class="mt-0 pt-0 primary-hr wrapper" />
+
+            <div class="row d-flex justify-content-between">
+                <div class="col-6">
+                    <p>
+                        <strong>Description:</strong>
+                        {{ journal.journal_description }}
+                        <!-- <strong>Quote To:</strong> {{ voucher.customer_name }}
+                        <br />
+                        <strong>Phone:</strong> {{ voucher.customer_phone }}
+                        <br />
+                        <strong>Address:</strong> {{ voucher.customer_address }} -->
+                    </p>
+                    <strong>Total: {{ journal.total_value | currency }}</strong>
+                </div>
+
+                <div class="col-2"></div>
+
+                <div class="col-4 text-end">
+                    <h3>Voucher</h3>
+
+                    <p>
+                        <strong>Voucher #:</strong> {{ journal.journal_number }}
+                        <br />
+                        <strong>Date:</strong> {{ journal.journal_date }}
+                    </p>
+                </div>
+
+                <br />
+            </div>
+
+            <table class="table table-bordered table-sm text-center">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Account</th>
+                        <th>Auxilliary</th>
+                        <th>Notes</th>
+                        <th>Currency</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="record in journal.journal_items">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ record.account_number }}</td>
+                        <td ng-if="record.name">
+                            {{ record.account_number }} - {{ record.name }}
+                        </td>
+                        <td ng-if="!record.name">---</td>
+
+                        <td>{{ record.reference_number || '---' }}</td>
+
+                        <td>{{ record.currency }}</td>
+
+                        <td>{{ record.debit | currency }}</td>
+                        <td>{{ record.credit | currency }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"></td>
+                        <th>{{ journal.total_value | currency }}</th>
+                        <th>{{ journal.total_value | currency }}</th>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- <div class="row d-flex justify-content-end text-end">
+                <div class="col-6 text-end">
+                    <strong>Total: {{ journal.total_value | currency }}</strong>
+                </div>
+            </div> -->
+        </div>
+
+        <footer class="divFooter fixed">
+            <img src="icon-250.png" style="opacity: 0.1" />
+        </footer>
+    </body>
+
+    <script>
+        const app = angular.module("printApp", []);
+        app.controller("printController", function ($scope) {
+            window.electron.print((event, data) => {
+                console.log(data);
+                $scope.$digest(($scope.journal = data));
+            });
+
+            $scope.splitArrayIntoChunks = function (array, chunkSize) {
+                $scope.chunks = [];
+                for (let i = 0; i < array.length; i += chunkSize) {
+                    $scope.chunks.push(array.slice(i, i + chunkSize));
+                }
+
+                return $scope.chunks;
+            };
+        });
+    </script>
+</html>
