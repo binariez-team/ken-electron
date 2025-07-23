@@ -7,6 +7,8 @@ const {
     shell,
 } = require("electron");
 
+app.disableHardwareAcceleration();
+
 // mysql dump
 const mysqldump = require("mysqldump");
 
@@ -47,8 +49,6 @@ async function createWindow() {
             preload: path.join(__dirname, "preload.js"),
         },
     });
-    win.maximize();
-    win.show();
 
     const loadSystem = async function () {
         if (isDev) {
@@ -59,6 +59,12 @@ async function createWindow() {
     };
 
     loadSystem();
+    win.once("ready-to-show", () => {
+        // win.show();
+        win.show();
+        setTimeout(() => win.maximize(), 100); // wait for one frame
+        // win.maximize();
+    });
 
     win.webContents.on("did-fail-load", () => loadSystem());
 
