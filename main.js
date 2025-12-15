@@ -9,9 +9,6 @@ const {
 
 app.disableHardwareAcceleration();
 
-// mysql dump
-const mysqldump = require("mysqldump");
-
 // Menu
 const template = require("./menu");
 const menu = Menu.buildFromTemplate(template);
@@ -275,39 +272,3 @@ ipcMain.handle("print-voucher", async (event, data) => {
         });
     });
 });
-
-// ipcMain.handle("backup", () => {
-//     return dialog
-//         .showSaveDialog({
-//             defaultPath: "kengroup.sql",
-//             properties: ["dontAddToRecent"],
-//         })
-//         .then(function (data) {
-//             return "canceled";
-//             // if (data.canceled == false) {
-//             //     try {
-//             //         return mysqldump({
-//             //             connection: {
-//             //                 host: "localhost",
-//             //                 user: "root",
-//             //                 password: "roottoor",
-//             //                 database: "kengroup",
-//             //             },
-//             //             dumpToFile: `${data.filePath}`,
-//             //         }).then(
-//             //             function () {
-//             //                 return "success";
-//             //             },
-//             //             function (error) {
-//             //                 return error;
-//             //             }
-//             //         );
-//             //     } catch (error) {
-//             //         console.log(error);
-//             //         return error;
-//             //     }
-//             // } else {
-//             //     return "canceled";
-//             // }
-//         });
-// });
