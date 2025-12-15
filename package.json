@@ -1,6 +1,6 @@
 {
 	"name": "kengroup",
-	"version": "2.2.3",
+	"version": "2.2.4",
 	"description": "Kengroup Accounting System",
 	"main": "main.js",
 	"scripts": {
@@ -41,8 +41,7 @@
 		"electron-log": "^4.4.8",
 		"electron-updater": "^6.1.1",
 		"moment": "^2.29.4",
-		"mysql2": "^3.6.0",
-		"mysqldump": "^3.2.0"
+		"mysql2": "^3.6.0"
 	},
 	"devDependencies": {
 		"electron": "^33.4.11",
