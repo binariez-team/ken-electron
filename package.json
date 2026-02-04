@@ -1,50 +1,50 @@
 {
-	"name": "kengroup",
-	"version": "2.2.7",
-	"description": "Kengroup Accounting System",
-	"main": "main.js",
-	"scripts": {
-		"start": "electron .",
-		"build": "rm -rf dist && electron-builder --x64 --win --publish always"
-	},
-	"build": {
-		"appId": "com.binariez.Ja3farMortada.kengroup",
-		"productName": "Kengroup",
-		"artifactName": "${name}-${version}.${ext}",
-		"target": "NSIS",
-		"publish": [
-			{
-				"provider": "github",
-				"owner": "binariez-team",
-				"repo": "ken-electron",
-				"releaseType": "release"
-			}
-		],
-		"directories": {
-			"buildResources": "resources"
-		},
-		"extraResources": [
-			"./server"
-		],
-		"npmRebuild": "false"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/binariez-team/ken-electron.git"
-	},
-	"author": "Binariez LLC",
-	"license": "ISC",
-	"dependencies": {
-		"angular": "^1.8.3",
-		"bootstrap": "^5.3.3",
-		"electron-context-menu": "^3.6.1",
-		"electron-log": "^4.4.8",
-		"electron-updater": "^6.1.1",
-		"moment": "^2.29.4",
-		"mysql2": "^3.6.0"
-	},
-	"devDependencies": {
-		"electron": "^33.4.11",
-		"electron-builder": "^24.6.3"
-	}
+    "name": "kengroup",
+    "version": "2.3.0",
+    "description": "Kengroup Accounting System",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "build": "rm -rf dist && electron-builder --x64 --win --publish always"
+    },
+    "build": {
+        "appId": "com.binariez.Ja3farMortada.kengroup",
+        "productName": "Kengroup",
+        "artifactName": "${name}-${version}.${ext}",
+        "target": "NSIS",
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "binariez-team",
+                "repo": "ken-electron",
+                "releaseType": "release"
+            }
+        ],
+        "directories": {
+            "buildResources": "resources"
+        },
+        "extraResources": [
+            "./server"
+        ],
+        "npmRebuild": "false"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/binariez-team/ken-electron.git"
+    },
+    "author": "Binariez LLC",
+    "license": "ISC",
+    "dependencies": {
+        "angular": "^1.8.3",
+        "bootstrap": "^5.3.3",
+        "electron-context-menu": "^3.6.1",
+        "electron-log": "^4.4.8",
+        "electron-updater": "^6.1.1",
+        "moment": "^2.29.4",
+        "mysql2": "^3.6.0"
+    },
+    "devDependencies": {
+        "electron": "^33.4.11",
+        "electron-builder": "^24.6.3"
+    }
 }
