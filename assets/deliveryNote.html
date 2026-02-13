@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -10,9 +10,9 @@
             href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
         />
         <link rel="stylesheet" href="printStyle.css" />
-        <script src="../node_modules/angular/angular.min.js"></script>
+        <script src="../node_modules/vue/dist/vue.global.js"></script>
     </head>
-    <body ng-app="printApp" ng-controller="printController">
+    <body id="app">
         <div class="header primary">
             <div class="row d-flex justify-content-between wrapper">
                 <div class="col-8">
@@ -37,9 +37,6 @@
                     <p>
                         <strong>Quote To:</strong> {{ invoice.customer_name }}
                         <br />
-                        <!-- <strong>Financial #:</strong> {{
-                        invoice.financial_number }}
-                        <br /> -->
                         <strong>Phone:</strong> {{ invoice.customer_phone }}
                         <br />
                         <strong>Address:</strong> {{ invoice.customer_address }}
@@ -72,44 +69,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="record in invoice.invoice_map">
-                        <td width="5%">{{ $index + 1 }}</td>
+                    <tr
+                        v-for="(record, index) in invoice.invoice_map"
+                        :key="index"
+                    >
+                        <td width="5%">{{ index + 1 }}</td>
                         <td width="10%">{{ record.sku }}</td>
                         <td width="75%">{{ record.product_name }}</td>
                         <td width="10%">{{ record.quantity }}</td>
                     </tr>
                 </tbody>
-                <!-- <tfoot>
-                    <tr>
-                        <td colspan="3"></td>
-                        <th>{{ invoice.totalQty }}</th>
-                    </tr>
-                </tfoot> -->
             </table>
         </div>
 
         <footer class="divFooter fixed">
             <img src="icon-250.png" style="opacity: 0.1" />
         </footer>
+
+        <script>
+            const { createApp, ref } = Vue;
+
+            createApp({
+                setup() {
+                    const invoice = ref({});
+
+                    if (window.electron) {
+                        window.electron.print((event, data) => {
+                            console.log(data);
+                            invoice.value = data;
+                        });
+                    }
+
+                    return {
+                        invoice,
+                    };
+                },
+            }).mount("#app");
+        </script>
     </body>
-
-    <script>
-        const app = angular.module("printApp", []);
-        app.controller("printController", function ($scope) {
-            window.electron.print((event, data) => {
-                console.log(data);
-                $scope.$digest(($scope.invoice = data));
-                // $scope.$digest(($scope.invoice = data.invoice));
-            });
-
-            $scope.splitArrayIntoChunks = function (array, chunkSize) {
-                $scope.chunks = [];
-                for (let i = 0; i < array.length; i += chunkSize) {
-                    $scope.chunks.push(array.slice(i, i + chunkSize));
-                }
-
-                return $scope.chunks;
-            };
-        });
-    </script>
 </html>

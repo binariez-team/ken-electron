@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -9,9 +9,9 @@
             href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
         />
         <link rel="stylesheet" href="printStyle.css" />
-        <script src="../node_modules/angular/angular.min.js"></script>
+        <script src="../node_modules/vue/dist/vue.global.js"></script>
     </head>
-    <body ng-app="printApp" ng-controller="printController">
+    <body id="app">
         <div class="container-fluid">
             <table class="table table-sm table-bordered text-center">
                 <thead>
@@ -26,36 +26,46 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="record in data">
+                    <tr v-for="(record, index) in data" :key="index">
                         <td>{{ record.sku }}</td>
                         <td>{{ record.product_name }}</td>
                         <td>{{ record.category_name }}</td>
                         <td>{{ record.quantity }}</td>
-                        <td>{{ record.average_cost_usd | currency }}</td>
-                        <td>{{ record.unit_price_usd | currency }}</td>
-                        <td>{{ record.ttc_price | currency }}</td>
+                        <td>{{ formatCurrency(record.average_cost_usd) }}</td>
+                        <td>{{ formatCurrency(record.unit_price_usd) }}</td>
+                        <td>{{ formatCurrency(record.ttc_price) }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
+
+        <script>
+            const { createApp, ref } = Vue;
+
+            createApp({
+                setup() {
+                    const data = ref([]);
+
+                    const formatCurrency = (value) => {
+                        return new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                        }).format(value || 0);
+                    };
+
+                    if (window.electron) {
+                        window.electron.print((event, incomingData) => {
+                            console.log(incomingData);
+                            data.value = incomingData;
+                        });
+                    }
+
+                    return {
+                        data,
+                        formatCurrency,
+                    };
+                },
+            }).mount("#app");
+        </script>
     </body>
-
-    <script>
-        const app = angular.module("printApp", []);
-        app.controller("printController", function ($scope) {
-            window.electron.print((event, data) => {
-                console.log(data);
-                $scope.$digest(($scope.data = data));
-            });
-
-            $scope.splitArrayIntoChunks = function (array, chunkSize) {
-                $scope.chunks = [];
-                for (let i = 0; i < array.length; i += chunkSize) {
-                    $scope.chunks.push(array.slice(i, i + chunkSize));
-                }
-
-                return $scope.chunks;
-            };
-        });
-    </script>
 </html>

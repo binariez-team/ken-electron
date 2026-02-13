@@ -1,6 +1,6 @@
 {
     "name": "kengroup",
-    "version": "2.3.1",
+    "version": "2.3.2",
     "description": "Kengroup Accounting System",
     "main": "main.js",
     "scripts": {
@@ -35,16 +35,16 @@
     "author": "Binariez LLC",
     "license": "ISC",
     "dependencies": {
-        "angular": "^1.8.3",
         "bootstrap": "^5.3.3",
         "electron-context-menu": "^3.6.1",
         "electron-log": "^4.4.8",
         "electron-updater": "^6.1.1",
         "moment": "^2.29.4",
-        "mysql2": "^3.6.0"
+        "mysql2": "^3.6.0",
+        "vue": "^3.5.28"
     },
     "devDependencies": {
-        "electron": "^33.4.11",
-        "electron-builder": "^24.6.3"
+        "electron": "^40.3.0",
+        "electron-builder": "^26.7.0"
     }
 }

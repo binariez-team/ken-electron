@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -10,9 +10,9 @@
             href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
         />
         <link rel="stylesheet" href="printStyle.css" />
-        <script src="../node_modules/angular/angular.min.js"></script>
+        <script src="../node_modules/vue/dist/vue.global.js"></script>
     </head>
-    <body ng-app="printApp" ng-controller="printController">
+    <body id="app">
         <div class="header primary">
             <div class="row d-flex justify-content-between wrapper">
                 <div class="col-8">
@@ -43,7 +43,10 @@
                         <br />
                         <strong>Address:</strong> {{ voucher.customer_address }} -->
                     </p>
-                    <strong>Total: {{ journal.total_value | currency }}</strong>
+                    <strong
+                        >Total: {{ formatCurrency(journal.total_value)
+                        }}</strong
+                    >
                 </div>
 
                 <div class="col-2"></div>
@@ -74,57 +77,64 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="record in journal.journal_items">
-                        <td>{{ $index + 1 }}</td>
+                    <tr
+                        v-for="(record, index) in journal.journal_items"
+                        :key="index"
+                    >
+                        <td>{{ index + 1 }}</td>
                         <td>{{ record.account_number }}</td>
-                        <td ng-if="record.name">
+                        <td v-if="record.name">
                             {{ record.account_number }} - {{ record.name }}
                         </td>
-                        <td ng-if="!record.name">---</td>
+                        <td v-else>---</td>
 
                         <td>{{ record.reference_number || '---' }}</td>
 
                         <td>{{ record.currency }}</td>
 
-                        <td>{{ record.debit | currency }}</td>
-                        <td>{{ record.credit | currency }}</td>
+                        <td>{{ formatCurrency(record.debit) }}</td>
+                        <td>{{ formatCurrency(record.credit) }}</td>
                     </tr>
                     <tr>
                         <td colspan="5"></td>
-                        <th>{{ journal.total_value | currency }}</th>
-                        <th>{{ journal.total_value | currency }}</th>
+                        <th>{{ formatCurrency(journal.total_value) }}</th>
+                        <th>{{ formatCurrency(journal.total_value) }}</th>
                     </tr>
                 </tbody>
             </table>
-
-            <!-- <div class="row d-flex justify-content-end text-end">
-                <div class="col-6 text-end">
-                    <strong>Total: {{ journal.total_value | currency }}</strong>
-                </div>
-            </div> -->
         </div>
 
         <footer class="divFooter fixed">
             <img src="icon-250.png" style="opacity: 0.1" />
         </footer>
+
+        <script>
+            const { createApp, ref } = Vue;
+
+            createApp({
+                setup() {
+                    const journal = ref({});
+
+                    const formatCurrency = (value) => {
+                        return new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                        }).format(value || 0);
+                    };
+
+                    if (window.electron) {
+                        window.electron.print((event, data) => {
+                            console.log(data);
+                            journal.value = data;
+                        });
+                    }
+
+                    return {
+                        journal,
+                        formatCurrency,
+                    };
+                },
+            }).mount("#app");
+        </script>
     </body>
-
-    <script>
-        const app = angular.module("printApp", []);
-        app.controller("printController", function ($scope) {
-            window.electron.print((event, data) => {
-                console.log(data);
-                $scope.$digest(($scope.journal = data));
-            });
-
-            $scope.splitArrayIntoChunks = function (array, chunkSize) {
-                $scope.chunks = [];
-                for (let i = 0; i < array.length; i += chunkSize) {
-                    $scope.chunks.push(array.slice(i, i + chunkSize));
-                }
-
-                return $scope.chunks;
-            };
-        });
-    </script>
 </html>

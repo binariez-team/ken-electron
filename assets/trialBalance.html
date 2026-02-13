@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -10,9 +10,9 @@
             href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
         />
         <link rel="stylesheet" href="printStyle.css" />
-        <script src="../node_modules/angular/angular.min.js"></script>
+        <script src="../node_modules/vue/dist/vue.global.js"></script>
     </head>
-    <body ng-app="printApp" ng-controller="printController">
+    <body id="app">
         <div class="header primary">
             <div class="row d-flex justify-content-between">
                 <div class="col-8">
@@ -62,58 +62,59 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="record in data">
+                    <tr v-for="(record, index) in data" :key="index">
                         <td>
                             {{ record.account_number }} - {{ record.english_name
                             }}
                         </td>
 
                         <td>
-                            <span ng-if="currency === 'USD'">
-                                {{ record.initial_debit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(record.initial_debit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
-                                {{ record.initial_debit_lbp.toLocaleString() }}
-                                L.L
+                            <span v-if="currency === 'LBP'">
+                                {{
+                                Number(record.initial_debit_lbp).toLocaleString()
+                                }} L.L
                             </span>
                         </td>
                         <td>
-                            <span ng-if="currency === 'USD'">
-                                {{ record.initial_credit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(record.initial_credit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
+                            <span v-if="currency === 'LBP'">
                                 {{ record.initial_credit_lbp }} L.L
                             </span>
                         </td>
                         <td>
-                            <span ng-if="currency === 'USD'">
-                                {{ record.period_debit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(record.period_debit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
+                            <span v-if="currency === 'LBP'">
                                 {{ record.period_debit_lbp }} L.L
                             </span>
                         </td>
                         <td>
-                            <span ng-if="currency === 'USD'">
-                                {{ record.period_credit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(record.period_credit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
+                            <span v-if="currency === 'LBP'">
                                 {{ record.period_credit_lbp }} L.L
                             </span>
                         </td>
                         <td>
-                            <span ng-if="currency === 'USD'">
-                                {{ record.end_debit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(record.end_debit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
+                            <span v-if="currency === 'LBP'">
                                 {{ record.end_debit_lbp }} L.L
                             </span>
                         </td>
                         <td>
-                            <span ng-if="currency === 'USD'">
-                                {{ record.end_credit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(record.end_credit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
+                            <span v-if="currency === 'LBP'">
                                 {{ record.end_credit_lbp }} L.L
                             </span>
                         </td>
@@ -123,50 +124,50 @@
                     <tr style="border-top: 2px black solid">
                         <th>Total</th>
                         <th>
-                            <span ng-if="currency === 'USD'">
-                                {{ totals.initial_debit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(totals.initial_debit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
+                            <span v-if="currency === 'LBP'">
                                 {{ totals.initial_debit_lbp }} L.L
                             </span>
                         </th>
                         <th>
-                            <span ng-if="currency === 'USD'">
-                                {{ totals.initial_credit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(totals.initial_credit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
+                            <span v-if="currency === 'LBP'">
                                 {{ totals.initial_credit_lbp }} L.L
                             </span>
                         </th>
                         <th>
-                            <span ng-if="currency === 'USD'">
-                                {{ totals.period_debit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(totals.period_debit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
+                            <span v-if="currency === 'LBP'">
                                 {{ totals.period_debit_lbp }} L.L
                             </span>
                         </th>
                         <th>
-                            <span ng-if="currency === 'USD'">
-                                {{ totals.period_credit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(totals.period_credit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
+                            <span v-if="currency === 'LBP'">
                                 {{ totals.period_credit_lbp }} L.L
                             </span>
                         </th>
                         <th>
-                            <span ng-if="currency === 'USD'">
-                                {{ totals.end_debit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(totals.end_debit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
+                            <span v-if="currency === 'LBP'">
                                 {{ totals.end_debit_lbp }} L.L
                             </span>
                         </th>
                         <th>
-                            <span ng-if="currency === 'USD'">
-                                {{ totals.end_credit | currency }}
+                            <span v-if="currency === 'USD'">
+                                {{ formatCurrency(totals.end_credit) }}
                             </span>
-                            <span ng-if="currency === 'LBP'">
+                            <span v-if="currency === 'LBP'">
                                 {{ totals.end_credit_lbp }} L.L
                             </span>
                         </th>
@@ -178,27 +179,46 @@
         <footer class="divFooter fixed">
             <img src="icon-250.png" style="opacity: 0.1" />
         </footer>
+
+        <script>
+            const { createApp, ref } = Vue;
+
+            createApp({
+                setup() {
+                    const data = ref([]);
+                    const currency = ref("");
+                    const startDate = ref("");
+                    const endDate = ref("");
+                    const totals = ref({});
+
+                    const formatCurrency = (value) => {
+                        return new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                        }).format(value || 0);
+                    };
+
+                    if (window.electron) {
+                        window.electron.print((event, incomingData) => {
+                            data.value = incomingData[0];
+                            currency.value = incomingData[1];
+                            startDate.value = incomingData[2];
+                            endDate.value = incomingData[3];
+                            totals.value = incomingData[4];
+                        });
+                    }
+
+                    return {
+                        data,
+                        currency,
+                        startDate,
+                        endDate,
+                        totals,
+                        formatCurrency,
+                        Number, // Expose Number for conversion if needed in template like Number().toLocaleString()
+                    };
+                },
+            }).mount("#app");
+        </script>
     </body>
-
-    <script>
-        const app = angular.module("printApp", []);
-        app.controller("printController", function ($scope) {
-            window.electron.print((event, data) => {
-                $scope.$digest(($scope.data = data[0]));
-                $scope.$digest(($scope.currency = data[1]));
-                $scope.$digest(($scope.startDate = data[2]));
-                $scope.$digest(($scope.endDate = data[3]));
-                $scope.$digest(($scope.totals = data[4]));
-            });
-
-            $scope.splitArrayIntoChunks = function (array, chunkSize) {
-                $scope.chunks = [];
-                for (let i = 0; i < array.length; i += chunkSize) {
-                    $scope.chunks.push(array.slice(i, i + chunkSize));
-                }
-
-                return $scope.chunks;
-            };
-        });
-    </script>
 </html>

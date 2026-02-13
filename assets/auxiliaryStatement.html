@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -10,9 +10,9 @@
             href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
         />
         <link rel="stylesheet" href="printStyle.css" />
-        <script src="../node_modules/angular/angular.min.js"></script>
+        <script src="../node_modules/vue/dist/vue.global.js"></script>
     </head>
-    <body ng-app="printApp" ng-controller="printController">
+    <body id="app">
         <div class="header primary">
             <div class="row d-flex justify-content-between">
                 <div class="col-8">
@@ -67,21 +67,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="record in data">
+                    <tr v-for="(record, index) in data" :key="index">
                         <td>{{ record.partner_id_fk }}</td>
                         <td>{{ record.partner_name }}</td>
 
-                        <td ng-if="currency == 'USD'">
-                            {{ record.end_debit | currency }}
+                        <td v-if="currency == 'USD'">
+                            {{ formatCurrency(record.end_debit) }}
                         </td>
-                        <td ng-if="currency == 'USD'">
-                            {{ record.end_credit | currency }}
+                        <td v-if="currency == 'USD'">
+                            {{ formatCurrency(record.end_credit) }}
                         </td>
 
-                        <td ng-if="currency == 'LBP'">
+                        <td v-if="currency == 'LBP'">
                             {{ record.end_debit_lbp }} L.L
                         </td>
-                        <td ng-if="currency == 'LBP'">
+                        <td v-if="currency == 'LBP'">
                             {{ record.end_credit_lbp }} L.L
                         </td>
                     </tr>
@@ -92,28 +92,43 @@
         <footer class="divFooter fixed">
             <img src="icon-250.png" style="opacity: 0.1" />
         </footer>
+
+        <script>
+            const { createApp, ref } = Vue;
+
+            createApp({
+                setup() {
+                    const data = ref([]);
+                    const currency = ref("");
+                    const startDate = ref("");
+                    const endDate = ref("");
+
+                    const formatCurrency = (value) => {
+                        return new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                        }).format(value || 0);
+                    };
+
+                    if (window.electron) {
+                        window.electron.print((event, incomingData) => {
+                            data.value = incomingData[0];
+                            currency.value = incomingData[1];
+                            startDate.value = incomingData[2];
+                            endDate.value = incomingData[3];
+                            console.log(data.value);
+                        });
+                    }
+
+                    return {
+                        data,
+                        currency,
+                        startDate,
+                        endDate,
+                        formatCurrency,
+                    };
+                },
+            }).mount("#app");
+        </script>
     </body>
-
-    <script>
-        const app = angular.module("printApp", []);
-        app.controller("printController", function ($scope) {
-            window.electron.print((event, data) => {
-                $scope.$digest(($scope.data = data[0]));
-                $scope.$digest(($scope.currency = data[1]));
-                $scope.$digest(($scope.startDate = data[2]));
-                $scope.$digest(($scope.endDate = data[3]));
-
-                console.log($scope.data);
-            });
-
-            $scope.splitArrayIntoChunks = function (array, chunkSize) {
-                $scope.chunks = [];
-                for (let i = 0; i < array.length; i += chunkSize) {
-                    $scope.chunks.push(array.slice(i, i + chunkSize));
-                }
-
-                return $scope.chunks;
-            };
-        });
-    </script>
 </html>

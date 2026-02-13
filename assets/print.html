@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -10,9 +10,9 @@
             href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
         />
         <link rel="stylesheet" href="printStyle.css" />
-        <script src="../node_modules/angular/angular.min.js"></script>
+        <script src="../node_modules/vue/dist/vue.global.js"></script>
     </head>
-    <body ng-app="printApp" ng-controller="printController">
+    <body id="app">
         <div class="header primary">
             <div class="row d-flex justify-content-between wrapper">
                 <div class="col-8">
@@ -51,8 +51,8 @@
                 </div>
 
                 <div class="col-4 text-end">
-                    <h3 ng-if="invoice.type == 'sale'">Sales Quote</h3>
-                    <h3 ng-if="invoice.type == 'return'">Return Invoice</h3>
+                    <h3 v-if="invoice.type == 'sale'">Sales Quote</h3>
+                    <h3 v-if="invoice.type == 'return'">Return Invoice</h3>
                     <p>
                         <strong>Quote #:</strong> {{ invoice.invoice_number }}
                         <br />
@@ -75,71 +75,66 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="record in invoice.invoice_map">
-                        <td>{{ $index + 1 }}</td>
+                    <tr
+                        v-for="(record, index) in invoice.invoice_map"
+                        :key="index"
+                    >
+                        <td>{{ index + 1 }}</td>
                         <td>{{ record.sku }}</td>
                         <td>{{ record.product_name }}</td>
-                        <td>{{ record.unit_price | currency }}</td>
+                        <td>{{ formatCurrency(record.unit_price) }}</td>
 
                         <td>{{ record.quantity }}</td>
 
-                        <td>{{ record.total_price | currency }}</td>
+                        <td>{{ formatCurrency(record.total_price) }}</td>
                     </tr>
                 </tbody>
             </table>
 
             <div class="row d-flex justify-content-end text-end">
                 <div class="col-6 text-end">
-                    <strong>Subtotal: </strong> {{ invoice.sub_total | currency
-                    }}
+                    <strong>Subtotal: </strong> {{
+                    formatCurrency(invoice.sub_total) }}
                     <br />
                     <strong>Discount: </strong> %{{ invoice.discount_percent ||
                     0 }}
                     <hr class="m-0" />
                     <strong>Net amount: </strong>
-                    {{ invoice.sub_total - invoice.discount_value | currency }}
+                    {{ formatCurrency(invoice.sub_total -
+                    invoice.discount_value) }}
                     <br />
 
-                    <strong ng-if="invoice.discount2_percent"
+                    <strong v-if="invoice.discount2_percent"
                         >Extra discount:
                     </strong>
-                    <span ng-if="invoice.discount2_percent"
+                    <span v-if="invoice.discount2_percent"
                         >%{{ invoice.discount2_percent }}</span
                     >
 
-                    <br ng-if="invoice.discount2_percent" />
+                    <br v-if="invoice.discount2_percent" />
 
-                    <strong ng-if="invoice.discount2_percent"
+                    <strong v-if="invoice.discount2_percent"
                         >Net amount:
                     </strong>
-                    <span ng-if="invoice.discount2_percent"
-                        >{{ invoice.sub_total - invoice.discount_value -
-                        invoice.discount2_value | currency }}</span
+                    <span v-if="invoice.discount2_percent"
+                        >{{ formatCurrency(invoice.sub_total -
+                        invoice.discount_value - invoice.discount2_value)
+                        }}</span
                     >
 
-                    <br ng-if="invoice.discount2_percent" />
+                    <br v-if="invoice.discount2_percent" />
 
-                    <!-- include VAT -->
-                    <!-- <span class="float-start"
-                        ><strong>VAT LBP: </strong>{{ invoice.vat_value_lbp |
-                        currency:'L.L ':0 }}</span
-                    >
-                    <strong>VAT $ (11%): </strong> {{ invoice.vat_value |
-                    currency }}
-                    <br /> -->
-                    <!-- end VAT -->
-
-                    <strong ng-if="invoice.include_delivery"
+                    <strong v-if="invoice.include_delivery"
                         >Delivery Charge:
                     </strong>
-                    <span ng-if="invoice.include_delivery"
-                        >{{ invoice.delivery_charge | currency }}</span
+                    <span v-if="invoice.include_delivery"
+                        >{{ formatCurrency(invoice.delivery_charge) }}</span
                     >
 
-                    <br ng-if="invoice.include_delivery" />
+                    <br v-if="invoice.include_delivery" />
 
                     <strong
-                        >Grand total: {{ invoice.total_amount | currency
+                        >Grand total: {{ formatCurrency(invoice.total_amount)
                         }}</strong
                     >
                 </div>
@@ -149,25 +144,44 @@
         <footer class="divFooter fixed">
             <img src="icon-250.png" style="opacity: 0.1" />
         </footer>
+
+        <script>
+            const { createApp, ref } = Vue;
+
+            createApp({
+                setup() {
+                    const invoice = ref({});
+
+                    const formatCurrency = (value) => {
+                        return new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                        }).format(value || 0);
+                    };
+
+                    const splitArrayIntoChunks = (array, chunkSize) => {
+                        const chunks = [];
+                        if (!array) return chunks;
+                        for (let i = 0; i < array.length; i += chunkSize) {
+                            chunks.push(array.slice(i, i + chunkSize));
+                        }
+                        return chunks;
+                    };
+
+                    if (window.electron) {
+                        window.electron.print((event, data) => {
+                            console.log(data);
+                            invoice.value = data;
+                        });
+                    }
+
+                    return {
+                        invoice,
+                        formatCurrency,
+                        splitArrayIntoChunks,
+                    };
+                },
+            }).mount("#app");
+        </script>
     </body>
-
-    <script>
-        const app = angular.module("printApp", []);
-        app.controller("printController", function ($scope) {
-            window.electron.print((event, data) => {
-                console.log(data);
-                $scope.$digest(($scope.invoice = data));
-                // $scope.$digest(($scope.invoice = data.invoice));
-            });
-
-            $scope.splitArrayIntoChunks = function (array, chunkSize) {
-                $scope.chunks = [];
-                for (let i = 0; i < array.length; i += chunkSize) {
-                    $scope.chunks.push(array.slice(i, i + chunkSize));
-                }
-
-                return $scope.chunks;
-            };
-        });
-    </script>
 </html>
