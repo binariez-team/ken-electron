@@ -1,6 +1,6 @@
 {
     "name": "kengroup",
-    "version": "2.3.2",
+    "version": "2.3.3",
     "description": "Kengroup Accounting System",
     "main": "main.js",
     "scripts": {
